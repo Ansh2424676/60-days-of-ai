@@ -4,13 +4,9 @@
 
 Learn how assigning different roles to Claude changes the quality and perspective of responses.
 
----
-
 # Question Used
 
 How can I become job-ready as a Python Developer in 6 months?
-
----
 
 # Response Without Role
 
@@ -19,8 +15,6 @@ Learn Python fundamentals, practice coding regularly, build projects, learn Git 
 ### Observation
 
 The answer was useful but generic and lacked a specific strategy.
-
----
 
 # Response With Founder Persona
 
@@ -41,8 +35,6 @@ How can I become job-ready as a Python Developer in 6 months?
 ### Observation
 
 The founder focused on employability, business value, and portfolio building.
-
----
 
 # Response With Developer Persona
 
@@ -80,8 +72,6 @@ Month 6:
 
 The developer provided a technical roadmap and practical learning path.
 
----
-
 # Comparison
 
 | Persona   | Focus                         |
@@ -90,8 +80,6 @@ The developer provided a technical roadmap and practical learning path.
 | Founder   | Career & Business Perspective |
 | Developer | Technical Learning Roadmap    |
 
----
-
 # Key Learnings
 
 1. Role-Based Prompting improves response quality.
@@ -99,8 +87,6 @@ The developer provided a technical roadmap and practical learning path.
 3. Expert roles generate more focused answers.
 4. Role prompting helps in better decision-making.
 5. It is useful for learning, business, career planning, and problem-solving.
-
----
 
 # Claude Usage Counter
 
