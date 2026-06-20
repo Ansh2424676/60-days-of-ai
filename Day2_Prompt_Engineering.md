@@ -6,8 +6,6 @@ Prompt Engineering is the process of giving AI clear context, goals, constraints
 
 A good prompt saves time, improves accuracy, and generates more useful responses.
 
----
-
 ## Weak Prompt
 
 Help me learn Python.
@@ -18,8 +16,6 @@ Help me learn Python.
 * No experience level
 * No timeline
 * No output format
-
----
 
 ## Engineered Prompt
 
@@ -48,8 +44,6 @@ Output Format:
 
 Goal:
 Become job-ready for Python Developer and Data Analyst roles within 30 days.
-
----
 
 ## Key Learning
 
