@@ -1,1 +1,120 @@
+# Day 3 – Role-Based Prompting
+
+## Objective
+
+Learn how assigning different roles to Claude changes the quality and perspective of responses.
+
+---
+
+# Question Used
+
+How can I become job-ready as a Python Developer in 6 months?
+
+---
+
+# Response Without Role
+
+Learn Python fundamentals, practice coding regularly, build projects, learn Git and GitHub, and apply for internships and jobs.
+
+### Observation
+
+The answer was useful but generic and lacked a specific strategy.
+
+---
+
+# Response With Founder Persona
+
+Prompt:
+
+You are a startup founder who has hired multiple Python developers.
+
+How can I become job-ready as a Python Developer in 6 months?
+
+### Response Summary
+
+* Focus on skills that companies actually need.
+* Build real-world projects instead of only watching tutorials.
+* Create a strong GitHub portfolio.
+* Learn problem-solving and communication skills.
+* Show proof of work through projects and LinkedIn posts.
+
+### Observation
+
+The founder focused on employability, business value, and portfolio building.
+
+---
+
+# Response With Developer Persona
+
+Prompt:
+
+You are a senior Python Developer with 10 years of experience.
+
+How can I become job-ready as a Python Developer in 6 months?
+
+### Response Summary
+
+Month 1-2:
+
+* Python Basics
+* OOP
+* Data Structures
+
+Month 3-4:
+
+* Flask/Django
+* APIs
+* SQL
+
+Month 5:
+
+* Git & GitHub
+* Deployment
+
+Month 6:
+
+* Build full-stack projects
+* Prepare for interviews
+
+### Observation
+
+The developer provided a technical roadmap and practical learning path.
+
+---
+
+# Comparison
+
+| Persona   | Focus                         |
+| --------- | ----------------------------- |
+| No Role   | Generic Advice                |
+| Founder   | Career & Business Perspective |
+| Developer | Technical Learning Roadmap    |
+
+---
+
+# Key Learnings
+
+1. Role-Based Prompting improves response quality.
+2. Different personas provide different perspectives.
+3. Expert roles generate more focused answers.
+4. Role prompting helps in better decision-making.
+5. It is useful for learning, business, career planning, and problem-solving.
+
+---
+
+# Claude Usage Counter
+
+Installed and explored the Chrome Extension.
+
+Observations:
+
+* Tracks Claude message usage.
+* Shows estimated limits.
+* Helps manage daily usage efficiently.
+
+---
+
+# Conclusion
+
+Role-Based Prompting allows AI to respond from a specific expert perspective, making answers more relevant, actionable, and valuable.
 
