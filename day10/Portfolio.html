@@ -1,1 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ansh Shukla — Python Developer & Data Analyst</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['Syne', 'sans-serif'],
+          body: ['Inter', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace'],
+        },
+        colors: {
+          space: { 950: '#040710', 900: '#080B14', 800: '#0D1220', 700: '#0F1628', 600: '#131C35' },
+          purple: { 400: '#A78BFA', 500: '#8B5CF6', 600: '#7C3AED' },
+          cyan: { 400: '#22D3EE', 500: '#06B6D4', 600: '#0891B2' },
+        },
+        animation: {
+          'fade-up': 'fadeUp 0.7s ease forwards',
+          'blink': 'blink 1s step-end infinite',
+          'float': 'float 6s ease-in-out infinite',
+          'shimmer': 'shimmer 2.5s linear infinite',
+          'spin-slow': 'spin 8s linear infinite',
+        },
+        keyframes: {
+          fadeUp: { '0%': { opacity: '0', transform: 'translateY(30px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+          blink: { '0%,100%': { opacity: '1' }, '50%': { opacity: '0' } },
+          float: { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-12px)' } },
+          shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } },
+        },
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --bg: #080B14;
+    --surface: #0F1628;
+    --surface2: #131C35;
+    --border: rgba(139,92,246,0.18);
+    --purple: #8B5CF6;
+    --cyan: #06B6D4;
+    --text: #E2E8F0;
+    --muted: #64748B;
+  }
+  html.light {
+    --bg: #F0F4FF;
+    --surface: #FFFFFF;
+    --surface2: #EEF2FF;
+    --border: rgba(139,92,246,0.22);
+    --purple: #7C3AED;
+    --cyan: #0891B2;
+    --text: #1E1B4B;
+    --muted: #6B7280;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background 0.4s, color 0.4s;
+    overflow-x: hidden;
+  }
+  ::selection { background: rgba(139,92,246,0.35); }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 10px; }
 
+  /* Glassmorphism */
+  .glass {
+    background: rgba(15,22,40,0.6);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  html.light .glass {
+    background: rgba(255,255,255,0.75);
+    border: 1px solid rgba(139,92,246,0.22);
+  }
+
+  /* Gradient text */
+  .grad-text {
+    background: linear-gradient(135deg, var(--purple) 0%, var(--cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Nav */
+  #navbar {
+    background: rgba(8,11,20,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.4s;
+  }
+  html.light #navbar {
+    background: rgba(240,244,255,0.88);
+  }
+  .nav-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    transition: color 0.25s;
+    position: relative;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--purple), var(--cyan));
+    transition: width 0.3s;
+  }
+  .nav-link:hover { color: var(--text); }
+  .nav-link:hover::after { width: 100%; }
+
+  /* Hero canvas */
+  #hero-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  /* Typing cursor */
+  .cursor { animation: blink 1s step-end infinite; }
+
+  /* Section reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Skill pill */
+  .skill-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+    transition: all 0.25s;
+    cursor: default;
+  }
+  .skill-pill:hover {
+    border-color: var(--purple);
+    background: rgba(139,92,246,0.12);
+    color: #A78BFA;
+    transform: translateY(-2px);
+  }
+
+  /* Project card */
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    position: relative;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(139,92,246,0.06), rgba(6,182,212,0.04));
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 0;
+  }
+  .project-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(139,92,246,0.5);
+    box-shadow: 0 20px 60px rgba(139,92,246,0.15);
+  }
+  .project-card:hover::before { opacity: 1; }
+  .project-card > * { position: relative; z-index: 1; }
+
+  /* Timeline */
+  .timeline-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    flex-shrink: 0;
+    margin-top: 5px;
+    box-shadow: 0 0 10px rgba(139,92,246,0.5);
+  }
+  .timeline-line {
+    width: 2px;
+    flex: 1;
+    background: linear-gradient(to bottom, rgba(139,92,246,0.4), transparent);
+    margin-left: 5px;
+    min-height: 40px;
+  }
+
+  /* Cert card */
+  .cert-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.25s;
+  }
+  .cert-card:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 8px 30px rgba(6,182,212,0.1);
+    transform: translateY(-3px);
+  }
+
+  /* Contact form */
+  .form-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+  .form-input:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(139,92,246,0.12);
+  }
+  .form-input::placeholder { color: var(--muted); }
+
+  /* CTA button */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    color: white;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    border-radius: 10px;
+    padding: 12px 28px;
+    transition: opacity 0.25s, transform 0.25s, box-shadow 0.25s;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(139,92,246,0.35);
+  }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    border-radius: 10px;
+    padding: 12px 28px;
+    transition: all 0.25s;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .btn-outline:hover {
+    border-color: var(--purple);
+    background: rgba(139,92,246,0.08);
+    transform: translateY(-2px);
+  }
+
+  /* Glow orbs */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  /* Section heading */
+  .section-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.15;
+  }
+
+  /* Shimmer bar */
+  .shimmer-bar {
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, var(--purple), var(--cyan), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2.5s linear infinite;
+  }
+
+  /* Mobile menu */
+  #mobile-menu {
+    display: none;
+  }
+  #mobile-menu.open {
+    display: flex;
+  }
+
+  /* Progress bars */
+  .progress-bar {
+    height: 4px;
+    border-radius: 999px;
+    background: var(--surface2);
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--purple), var(--cyan));
+    width: 0;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  html.light .project-card,
+  html.light .cert-card,
+  html.light .form-input { background: var(--surface); }
+</style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="#hero" class="font-mono text-sm font-medium" style="color:var(--cyan)">
+      &lt;<span style="color:var(--purple)">Ansh</span> /&gt;
+    </a>
+    <!-- Desktop Nav -->
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#about" class="nav-link">about</a>
+      <a href="#skills" class="nav-link">skills</a>
+      <a href="#projects" class="nav-link">projects</a>
+      <a href="#experience" class="nav-link">experience</a>
+      <a href="#contact" class="nav-link">contact</a>
+    </div>
+    <!-- Controls -->
+    <div class="flex items-center gap-4">
+      <!-- Theme toggle -->
+      <button id="theme-toggle" aria-label="Toggle theme" class="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110" style="background:var(--surface2); border:1px solid var(--border)">
+        <svg id="icon-moon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+        <svg id="icon-sun" class="w-4 h-4 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path stroke-linecap="round" d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
+      <!-- Mobile hamburger -->
+      <button id="hamburger" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-1.5" aria-label="Menu">
+        <span class="w-5 h-0.5 rounded" style="background:var(--text);transition:all 0.3s"></span>
+        <span class="w-5 h-0.5 rounded" style="background:var(--text);transition:all 0.3s"></span>
+        <span class="w-5 h-0.5 rounded" style="background:var(--text);transition:all 0.3s"></span>
+      </button>
+    </div>
+  </div>
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="md:hidden flex-col px-6 pb-5 gap-4 border-t" style="border-color:var(--border)">
+    <a href="#about" class="nav-link py-1 text-sm">about</a>
+    <a href="#skills" class="nav-link py-1 text-sm">skills</a>
+    <a href="#projects" class="nav-link py-1 text-sm">projects</a>
+    <a href="#experience" class="nav-link py-1 text-sm">experience</a>
+    <a href="#contact" class="nav-link py-1 text-sm">contact</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="hero" class="relative min-h-screen flex items-center overflow-hidden">
+  <canvas id="hero-canvas"></canvas>
+  <!-- Glow orbs -->
+  <div class="orb w-96 h-96 top-1/4 -left-24 opacity-20" style="background:var(--purple)"></div>
+  <div class="orb w-64 h-64 top-1/3 right-1/4 opacity-15" style="background:var(--cyan)"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-6 py-32">
+    <div class="max-w-3xl">
+      <!-- Eyebrow -->
+      <div class="flex items-center gap-3 mb-6 reveal">
+        <span class="font-mono text-xs tracking-widest uppercase" style="color:var(--cyan)">Hello, World!</span>
+        <div class="shimmer-bar w-16"></div>
+      </div>
+      <!-- Name -->
+      <h1 class="font-display font-extrabold leading-tight mb-4 reveal" style="font-size:clamp(2.5rem,7vw,5.5rem); color:var(--text)">
+        I'm <span class="grad-text">Ansh Shukla</span>
+      </h1>
+      <!-- Typing line -->
+      <div class="font-mono text-lg md:text-xl mb-6 reveal" style="color:var(--muted)">
+        <span id="typed-text"></span><span class="cursor" style="color:var(--cyan)">|</span>
+      </div>
+      <!-- Location -->
+      <p class="flex items-center gap-2 text-sm mb-8 reveal" style="color:var(--muted)">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Kanpur, Uttar Pradesh, India
+      </p>
+      <!-- About short -->
+      <p class="text-base leading-relaxed mb-10 reveal max-w-xl" style="color:var(--muted)">
+        Python Developer and Data Analytics enthusiast building practical web apps, automation scripts, dashboards, and ML projects — solving real-world problems with data and AI.
+      </p>
+      <!-- CTAs -->
+      <div class="flex flex-wrap gap-4 reveal">
+        <a href="#projects" class="btn-primary">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          View Projects
+        </a>
+        <a href="mailto:anshshukla2424@gmail.com" class="btn-outline">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          Get in Touch
+        </a>
+      </div>
+      <!-- Social links -->
+      <div class="flex items-center gap-5 mt-10 reveal">
+        <a href="https://github.com/Ansh2424676" target="_blank" rel="noopener" class="transition-all hover:scale-110 hover:opacity-80" style="color:var(--muted)">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/ansh-shukla-4ba566328" target="_blank" rel="noopener" class="transition-all hover:scale-110 hover:opacity-80" style="color:var(--muted)">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="mailto:anshshukla2424@gmail.com" class="transition-all hover:scale-110 hover:opacity-80" style="color:var(--muted)">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10" style="color:var(--muted)">
+    <span class="font-mono text-xs">scroll</span>
+    <div class="w-px h-8 animate-bounce" style="background:linear-gradient(to bottom, var(--purple), transparent)"></div>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section id="about" class="py-24 relative overflow-hidden">
+  <div class="orb w-72 h-72 -right-20 top-0 opacity-10" style="background:var(--purple)"></div>
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-16 items-center">
+      <!-- Avatar / Visual -->
+      <div class="reveal flex justify-center">
+        <div class="relative w-64 h-64 md:w-80 md:h-80">
+          <!-- Rotating ring -->
+          <div class="absolute inset-0 rounded-full border-2 border-dashed animate-spin-slow" style="border-color:rgba(139,92,246,0.3)"></div>
+          <div class="absolute inset-4 rounded-full border border-dashed animate-spin-slow" style="border-color:rgba(6,182,212,0.25); animation-direction:reverse; animation-duration:12s"></div>
+          <!-- Center avatar placeholder -->
+          <div class="absolute inset-8 rounded-full flex items-center justify-center glass" style="border-color:var(--border)">
+            <div class="text-center">
+              <div class="font-display font-extrabold grad-text" style="font-size:3.5rem">AS</div>
+              <div class="font-mono text-xs mt-1" style="color:var(--muted)">dev & analyst</div>
+            </div>
+          </div>
+          <!-- Orbiting dots -->
+          <div class="absolute top-2 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full" style="background:var(--purple)"></div>
+          <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full" style="background:var(--cyan)"></div>
+          <div class="absolute left-2 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full" style="background:var(--purple); opacity:0.6"></div>
+          <div class="absolute right-2 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full" style="background:var(--cyan); opacity:0.6"></div>
+        </div>
+      </div>
+      <!-- Text -->
+      <div class="reveal">
+        <div class="section-eyebrow">// about_me</div>
+        <h2 class="section-title mb-6">Who am I?</h2>
+        <div class="shimmer-bar w-24 mb-6"></div>
+        <p class="leading-relaxed mb-5" style="color:var(--muted)">
+          I'm a <strong style="color:var(--text)">Python Developer</strong> and <strong style="color:var(--text)">Data Analytics</strong> enthusiast passionate about turning raw data into actionable insights. I love the intersection of data science, machine learning, and web development.
+        </p>
+        <p class="leading-relaxed mb-8" style="color:var(--muted)">
+          From building predictive healthcare apps to designing AI-powered nutrition analytics, I'm always working on practical projects that solve real-world problems while expanding my GenAI knowledge.
+        </p>
+        <!-- Quick stats -->
+        <div class="grid grid-cols-3 gap-4">
+          <div class="glass rounded-xl p-4 text-center">
+            <div class="font-display font-bold text-2xl grad-text">3+</div>
+            <div class="font-mono text-xs mt-1" style="color:var(--muted)">Projects</div>
+          </div>
+          <div class="glass rounded-xl p-4 text-center">
+            <div class="font-display font-bold text-2xl grad-text">2</div>
+            <div class="font-mono text-xs mt-1" style="color:var(--muted)">Internships</div>
+          </div>
+          <div class="glass rounded-xl p-4 text-center">
+            <div class="font-display font-bold text-2xl grad-text">4+</div>
+            <div class="font-mono text-xs mt-1" style="color:var(--muted)">Certs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SKILLS ===== -->
+<section id="skills" class="py-24 relative" style="background:var(--surface)">
+  <div class="orb w-96 h-96 -left-24 bottom-0 opacity-10" style="background:var(--cyan)"></div>
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-14 reveal">
+      <div class="section-eyebrow">// skills</div>
+      <h2 class="section-title">What I Work With</h2>
+      <div class="shimmer-bar w-24 mx-auto mt-4"></div>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <!-- Technical -->
+      <div class="glass rounded-2xl p-7 reveal">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(139,92,246,0.15)">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--purple)"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+          </div>
+          <h3 class="font-display font-bold text-base" style="color:var(--text)">Technical</h3>
+        </div>
+        <div class="space-y-4">
+          <div data-skill="Python" data-level="90">
+            <div class="flex justify-between font-mono text-xs mb-1.5" style="color:var(--muted)"><span>Python</span><span>90%</span></div>
+            <div class="progress-bar"><div class="progress-fill" data-target="90"></div></div>
+          </div>
+          <div data-skill="SQL" data-level="80">
+            <div class="flex justify-between font-mono text-xs mb-1.5" style="color:var(--muted)"><span>SQL</span><span>80%</span></div>
+            <div class="progress-bar"><div class="progress-fill" data-target="80"></div></div>
+          </div>
+          <div data-skill="Machine Learning" data-level="75">
+            <div class="flex justify-between font-mono text-xs mb-1.5" style="color:var(--muted)"><span>Machine Learning</span><span>75%</span></div>
+            <div class="progress-bar"><div class="progress-fill" data-target="75"></div></div>
+          </div>
+          <div data-skill="Data Analysis" data-level="82">
+            <div class="flex justify-between font-mono text-xs mb-1.5" style="color:var(--muted)"><span>Data Analysis</span><span>82%</span></div>
+            <div class="progress-bar"><div class="progress-fill" data-target="82"></div></div>
+          </div>
+          <div data-skill="Flask" data-level="70">
+            <div class="flex justify-between font-mono text-xs mb-1.5" style="color:var(--muted)"><span>Flask</span><span>70%</span></div>
+            <div class="progress-bar"><div class="progress-fill" data-target="70"></div></div>
+          </div>
+          <div data-skill="Power BI" data-level="68">
+            <div class="flex justify-between font-mono text-xs mb-1.5" style="color:var(--muted)"><span>Power BI</span><span>68%</span></div>
+            <div class="progress-bar"><div class="progress-fill" data-target="68"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tools -->
+      <div class="glass rounded-2xl p-7 reveal">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(6,182,212,0.15)">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--cyan)"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <h3 class="font-display font-bold text-base" style="color:var(--text)">Tools & Platforms</h3>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="skill-pill">VS Code</span>
+          <span class="skill-pill">Git</span>
+          <span class="skill-pill">GitHub</span>
+          <span class="skill-pill">Jupyter Notebook</span>
+          <span class="skill-pill">Power BI</span>
+          <span class="skill-pill">Google Colab</span>
+          <span class="skill-pill">HTML</span>
+          <span class="skill-pill">CSS</span>
+          <span class="skill-pill">JavaScript</span>
+          <span class="skill-pill">Pandas</span>
+          <span class="skill-pill">Scikit-learn</span>
+          <span class="skill-pill">Excel</span>
+        </div>
+      </div>
+
+      <!-- Soft skills -->
+      <div class="glass rounded-2xl p-7 reveal">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(139,92,246,0.15)">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--purple)"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <h3 class="font-display font-bold text-base" style="color:var(--text)">Soft Skills</h3>
+        </div>
+        <div class="space-y-3">
+          <div class="flex items-center gap-3 p-3 rounded-xl" style="background:var(--surface2)">
+            <div class="w-2 h-2 rounded-full" style="background:var(--purple)"></div>
+            <span class="text-sm" style="color:var(--text)">Problem Solving</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-xl" style="background:var(--surface2)">
+            <div class="w-2 h-2 rounded-full" style="background:var(--cyan)"></div>
+            <span class="text-sm" style="color:var(--text)">Communication</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-xl" style="background:var(--surface2)">
+            <div class="w-2 h-2 rounded-full" style="background:var(--purple)"></div>
+            <span class="text-sm" style="color:var(--text)">Teamwork</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-xl" style="background:var(--surface2)">
+            <div class="w-2 h-2 rounded-full" style="background:var(--cyan)"></div>
+            <span class="text-sm" style="color:var(--text)">Quick Learning</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-xl" style="background:var(--surface2)">
+            <div class="w-2 h-2 rounded-full" style="background:var(--purple)"></div>
+            <span class="text-sm" style="color:var(--text)">Time Management</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROJECTS ===== -->
+<section id="projects" class="py-24 relative overflow-hidden">
+  <div class="orb w-80 h-80 right-0 top-1/2 opacity-10" style="background:var(--purple)"></div>
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-14 reveal">
+      <div class="section-eyebrow">// projects</div>
+      <h2 class="section-title">What I've Built</h2>
+      <div class="shimmer-bar w-24 mx-auto mt-4"></div>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-7">
+      <!-- Credit Card Fraud Detection -->
+      <div class="project-card reveal">
+        <div class="p-7">
+          <div class="flex items-start justify-between mb-5">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(6,182,212,0.1))">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--purple)"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+            </div>
+            <span class="font-mono text-xs px-2.5 py-1 rounded-full" style="background:rgba(139,92,246,0.1); color:var(--purple); border:1px solid rgba(139,92,246,0.25)">ML</span>
+          </div>
+          <h3 class="font-display font-bold text-lg mb-3" style="color:var(--text)">Credit Card Fraud Detection</h3>
+          <p class="text-sm leading-relaxed mb-5" style="color:var(--muted)">Machine learning model for detecting fraudulent transactions using classification algorithms and feature engineering on real-world transaction data.</p>
+          <div class="flex flex-wrap gap-1.5 mb-6">
+            <span class="skill-pill">Python</span>
+            <span class="skill-pill">Pandas</span>
+            <span class="skill-pill">Scikit-learn</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <a href="https://github.com/Ansh2424676" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-xs font-mono transition-all hover:opacity-80" style="color:var(--cyan)">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+              View Code
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Heart Disease Prediction -->
+      <div class="project-card reveal">
+        <div class="p-7">
+          <div class="flex items-start justify-between mb-5">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,rgba(6,182,212,0.2),rgba(139,92,246,0.1))">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--cyan)"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            </div>
+            <span class="font-mono text-xs px-2.5 py-1 rounded-full" style="background:rgba(6,182,212,0.1); color:var(--cyan); border:1px solid rgba(6,182,212,0.25)">Flask</span>
+          </div>
+          <h3 class="font-display font-bold text-lg mb-3" style="color:var(--text)">Heart Disease Prediction</h3>
+          <p class="text-sm leading-relaxed mb-5" style="color:var(--muted)">Predictive healthcare web application built with Flask, enabling users to assess heart disease risk through a clean, user-friendly interface powered by ML.</p>
+          <div class="flex flex-wrap gap-1.5 mb-6">
+            <span class="skill-pill">Python</span>
+            <span class="skill-pill">Flask</span>
+            <span class="skill-pill">ML</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <a href="https://github.com/Ansh2424676" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-xs font-mono transition-all hover:opacity-80" style="color:var(--cyan)">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+              View Code
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- NutriScope -->
+      <div class="project-card reveal" style="border-color:rgba(139,92,246,0.35)">
+        <div class="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl" style="background:linear-gradient(90deg,var(--purple),var(--cyan))"></div>
+        <div class="p-7">
+          <div class="flex items-start justify-between mb-5">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,rgba(139,92,246,0.25),rgba(6,182,212,0.15))">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--purple)"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"/></svg>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-xs px-2.5 py-1 rounded-full" style="background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(6,182,212,0.1)); color:var(--purple); border:1px solid rgba(139,92,246,0.35)">AI</span>
+              <span class="font-mono text-xs px-2 py-0.5 rounded-full" style="background:rgba(6,182,212,0.1); color:var(--cyan); font-size:0.6rem">Featured</span>
+            </div>
+          </div>
+          <h3 class="font-display font-bold text-lg mb-3" style="color:var(--text)">NutriScope</h3>
+          <p class="text-sm leading-relaxed mb-5" style="color:var(--muted)">AI-powered Nutrition Analytics Application built using Claude Artifacts. Provides personalized nutritional insights with interactive data visualizations.</p>
+          <div class="flex flex-wrap gap-1.5 mb-6">
+            <span class="skill-pill">HTML</span>
+            <span class="skill-pill">CSS</span>
+            <span class="skill-pill">JavaScript</span>
+            <span class="skill-pill">Chart.js</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <a href="https://github.com/Ansh2424676" target="_blank" rel="noopener" class="flex items-center gap-1.5 text-xs font-mono transition-all hover:opacity-80" style="color:var(--cyan)">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+              View Code
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EXPERIENCE ===== -->
+<section id="experience" class="py-24 relative" style="background:var(--surface)">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-16">
+      <!-- Experience -->
+      <div>
+        <div class="section-eyebrow reveal">// experience</div>
+        <h2 class="section-title mb-10 reveal">Where I've Worked</h2>
+        <div class="space-y-0">
+          <!-- Infotact -->
+          <div class="flex gap-5 reveal">
+            <div class="flex flex-col items-center">
+              <div class="timeline-dot"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="pb-10 flex-1">
+              <div class="glass rounded-xl p-5">
+                <div class="flex items-start justify-between gap-3 mb-3">
+                  <div>
+                    <h3 class="font-display font-bold text-base" style="color:var(--text)">Python Developer Intern</h3>
+                    <p class="font-mono text-xs mt-0.5" style="color:var(--purple)">Infotact Solutions</p>
+                  </div>
+                  <span class="font-mono text-xs px-2.5 py-1 rounded-full whitespace-nowrap" style="background:rgba(139,92,246,0.1); color:var(--purple); border:1px solid rgba(139,92,246,0.25)">Internship</span>
+                </div>
+                <p class="text-sm leading-relaxed" style="color:var(--muted)">Developed Python-based solutions, automation scripts, and contributed to data processing pipelines at Infotact Solutions.</p>
+              </div>
+            </div>
+          </div>
+          <!-- CodeClause -->
+          <div class="flex gap-5 reveal">
+            <div class="flex flex-col items-center">
+              <div class="timeline-dot"></div>
+              <div class="w-0"></div>
+            </div>
+            <div class="flex-1">
+              <div class="glass rounded-xl p-5">
+                <div class="flex items-start justify-between gap-3 mb-3">
+                  <div>
+                    <h3 class="font-display font-bold text-base" style="color:var(--text)">Data Science Intern</h3>
+                    <p class="font-mono text-xs mt-0.5" style="color:var(--cyan)">CodeClause</p>
+                  </div>
+                  <span class="font-mono text-xs px-2.5 py-1 rounded-full whitespace-nowrap" style="background:rgba(6,182,212,0.1); color:var(--cyan); border:1px solid rgba(6,182,212,0.25)">Internship</span>
+                </div>
+                <p class="text-sm leading-relaxed" style="color:var(--muted)">Worked on data science projects, applied machine learning techniques, and developed data analysis solutions at CodeClause.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Certifications -->
+      <div>
+        <div class="section-eyebrow reveal">// certifications</div>
+        <h2 class="section-title mb-10 reveal">Credentials</h2>
+        <div class="space-y-4">
+          <div class="cert-card reveal">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(6,182,212,0.1))">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--purple)"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"/></svg>
+            </div>
+            <div>
+              <div class="font-display font-bold text-sm" style="color:var(--text)">Python Certification</div>
+              <div class="font-mono text-xs mt-0.5" style="color:var(--muted)">Programming Fundamentals & Advanced Topics</div>
+            </div>
+          </div>
+          <div class="cert-card reveal">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,rgba(6,182,212,0.2),rgba(139,92,246,0.1))">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--cyan)"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/></svg>
+            </div>
+            <div>
+              <div class="font-display font-bold text-sm" style="color:var(--text)">SQL Certification</div>
+              <div class="font-mono text-xs mt-0.5" style="color:var(--muted)">Database Querying & Management</div>
+            </div>
+          </div>
+          <div class="cert-card reveal">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(6,182,212,0.1))">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--purple)"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/></svg>
+            </div>
+            <div>
+              <div class="font-display font-bold text-sm" style="color:var(--text)">Machine Learning Certification</div>
+              <div class="font-mono text-xs mt-0.5" style="color:var(--muted)">Algorithms, Models & Applications</div>
+            </div>
+          </div>
+          <div class="cert-card reveal">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,rgba(6,182,212,0.2),rgba(139,92,246,0.1))">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--cyan)"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>
+            </div>
+            <div>
+              <div class="font-display font-bold text-sm" style="color:var(--text)">Data Analytics Certification</div>
+              <div class="font-mono text-xs mt-0.5" style="color:var(--muted)">Analysis, Visualization & Insights</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact" class="py-24 relative overflow-hidden">
+  <div class="orb w-96 h-96 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10" style="background:var(--purple)"></div>
+  <div class="max-w-3xl mx-auto px-6 text-center relative z-10">
+    <div class="section-eyebrow reveal">// contact</div>
+    <h2 class="section-title mb-4 reveal">Let's Build Something</h2>
+    <p class="mb-10 leading-relaxed reveal" style="color:var(--muted)">I'm open to internship opportunities, collaboration on data/ML projects, or just a good conversation about tech. Drop a message!</p>
+
+    <!-- Contact card -->
+    <div class="glass rounded-2xl p-8 md:p-10 reveal text-left">
+      <!-- Contact info -->
+      <div class="grid md:grid-cols-3 gap-5 mb-8">
+        <a href="mailto:anshshukla2424@gmail.com" class="flex items-center gap-3 p-4 rounded-xl transition-all hover:scale-105" style="background:var(--surface2)">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--purple)"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          <div>
+            <div class="font-mono text-xs" style="color:var(--muted)">Email</div>
+            <div class="text-xs font-medium mt-0.5 truncate" style="color:var(--text)">anshshukla2424@gmail.com</div>
+          </div>
+        </a>
+        <a href="https://www.linkedin.com/in/ansh-shukla-4ba566328" target="_blank" rel="noopener" class="flex items-center gap-3 p-4 rounded-xl transition-all hover:scale-105" style="background:var(--surface2)">
+          <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" style="color:var(--cyan)"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          <div>
+            <div class="font-mono text-xs" style="color:var(--muted)">LinkedIn</div>
+            <div class="text-xs font-medium mt-0.5" style="color:var(--text)">ansh-shukla</div>
+          </div>
+        </a>
+        <a href="https://github.com/Ansh2424676" target="_blank" rel="noopener" class="flex items-center gap-3 p-4 rounded-xl transition-all hover:scale-105" style="background:var(--surface2)">
+          <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" style="color:var(--purple)"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <div>
+            <div class="font-mono text-xs" style="color:var(--muted)">GitHub</div>
+            <div class="text-xs font-medium mt-0.5" style="color:var(--text)">Ansh2424676</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Quick message form -->
+      <div class="space-y-4">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="font-mono text-xs mb-2 block" style="color:var(--muted)">Your Name</label>
+            <input type="text" placeholder="Jane Doe" class="form-input" />
+          </div>
+          <div>
+            <label class="font-mono text-xs mb-2 block" style="color:var(--muted)">Email Address</label>
+            <input type="email" placeholder="jane@example.com" class="form-input" />
+          </div>
+        </div>
+        <div>
+          <label class="font-mono text-xs mb-2 block" style="color:var(--muted)">Message</label>
+          <textarea rows="4" placeholder="I'd love to collaborate on..." class="form-input resize-none"></textarea>
+        </div>
+        <a href="mailto:anshshukla2424@gmail.com" class="btn-primary w-full justify-center">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
+          Send Message via Email
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="py-8 border-t" style="border-color:var(--border); background:var(--surface)">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="font-mono text-xs" style="color:var(--muted)">
+      &lt;<span style="color:var(--purple)">Ansh Shukla</span> /&gt; · Built with passion & code
+    </div>
+    <div class="font-mono text-xs" style="color:var(--muted)">
+      Python · Data · GenAI · Kanpur, India
+    </div>
+    <div class="flex items-center gap-4">
+      <a href="https://github.com/Ansh2424676" target="_blank" rel="noopener" class="transition-all hover:opacity-60" style="color:var(--muted)">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/ansh-shukla-4ba566328" target="_blank" rel="noopener" class="transition-all hover:opacity-60" style="color:var(--muted)">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ===== THEME TOGGLE =====
+  const html = document.documentElement;
+  const themeBtn = document.getElementById('theme-toggle');
+  const iconMoon = document.getElementById('icon-moon');
+  const iconSun = document.getElementById('icon-sun');
+
+  function setTheme(dark) {
+    if (dark) {
+      html.classList.add('dark');
+      html.classList.remove('light');
+      iconMoon.classList.remove('hidden');
+      iconSun.classList.add('hidden');
+    } else {
+      html.classList.remove('dark');
+      html.classList.add('light');
+      iconMoon.classList.add('hidden');
+      iconSun.classList.remove('hidden');
+    }
+  }
+
+  themeBtn.addEventListener('click', () => {
+    const isDark = html.classList.contains('dark');
+    setTheme(!isDark);
+    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  });
+
+  const saved = localStorage.getItem('theme');
+  setTheme(saved !== 'light');
+
+  // ===== MOBILE MENU =====
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  });
+
+  // ===== PARTICLE CANVAS =====
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let mouse = { x: null, y: null };
+  let animId;
+
+  function resize() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.vx = (Math.random() - 0.5) * 0.4;
+      this.vy = (Math.random() - 0.5) * 0.4;
+      this.r = Math.random() * 1.5 + 0.5;
+      this.alpha = Math.random() * 0.5 + 0.15;
+      this.color = Math.random() > 0.5 ? '139,92,246' : '6,182,212';
+    }
+    update() {
+      if (mouse.x) {
+        const dx = this.x - mouse.x, dy = this.y - mouse.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 120) {
+          this.vx += dx / dist * 0.06;
+          this.vy += dy / dist * 0.06;
+        }
+      }
+      this.x += this.vx; this.y += this.vy;
+      this.vx *= 0.99; this.vy *= 0.99;
+      if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${this.color},${this.alpha})`;
+      ctx.fill();
+    }
+  }
+
+  function initParticles() {
+    particles = [];
+    const count = Math.min(Math.floor((canvas.width * canvas.height) / 12000), 120);
+    for (let i = 0; i < count; i++) particles.push(new Particle());
+  }
+
+  function drawConnections() {
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 100) {
+          const alpha = (1 - dist / 100) * 0.12;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(139,92,246,${alpha})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawConnections();
+    particles.forEach(p => { p.update(); p.draw(); });
+    animId = requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', () => { resize(); initParticles(); });
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+  canvas.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+
+  resize();
+  initParticles();
+  animate();
+
+  // ===== TYPING ANIMATION =====
+  const phrases = [
+    'Python Developer',
+    'Data Analyst',
+    'GenAI Learner',
+    'ML Enthusiast',
+    'Flask Developer',
+    'Problem Solver',
+  ];
+  let phraseIdx = 0, charIdx = 0, deleting = false;
+  const typedEl = document.getElementById('typed-text');
+
+  function type() {
+    const current = phrases[phraseIdx];
+    if (!deleting) {
+      typedEl.textContent = current.slice(0, ++charIdx);
+      if (charIdx === current.length) {
+        deleting = true;
+        setTimeout(type, 1800);
+        return;
+      }
+    } else {
+      typedEl.textContent = current.slice(0, --charIdx);
+      if (charIdx === 0) {
+        deleting = false;
+        phraseIdx = (phraseIdx + 1) % phrases.length;
+        setTimeout(type, 400);
+        return;
+      }
+    }
+    setTimeout(type, deleting ? 45 : 80);
+  }
+  setTimeout(type, 600);
+
+  // ===== SCROLL REVEAL =====
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const delay = el.dataset.delay || 0;
+        setTimeout(() => el.classList.add('visible'), delay);
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    // Stagger siblings
+    const siblings = el.parentElement.querySelectorAll('.reveal');
+    let idx = Array.from(siblings).indexOf(el);
+    el.dataset.delay = idx * 80;
+    observer.observe(el);
+  });
+
+  // ===== PROGRESS BAR ANIMATION =====
+  const progressObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.progress-fill').forEach(bar => {
+          bar.style.width = bar.dataset.target + '%';
+        });
+        progressObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.glass').forEach(el => {
+    if (el.querySelector('.progress-fill')) progressObserver.observe(el);
+  });
+
+  // Trigger hero reveals immediately
+  document.querySelectorAll('#hero .reveal').forEach((el, i) => {
+    setTimeout(() => el.classList.add('visible'), 200 + i * 120);
+  });
+</script>
+</body>
+</html>
