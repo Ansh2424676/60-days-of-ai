@@ -1,0 +1,374 @@
+<style>
+  :root {
+    --bg: #f5f6fa;
+    --card-bg: #ffffff;
+    --border: #e4e7ec;
+    --text-main: #1a1d29;
+    --text-muted: #6b7280;
+    --accent: #4f46e5;
+    --accent-light: #eef2ff;
+    --red: #ef4444;
+    --red-bg: #fee2e2;
+    --orange: #f59e0b;
+    --orange-bg: #fef3c7;
+    --green: #10b981;
+    --green-bg: #d1fae5;
+    --purple: #8b5cf6;
+    --purple-bg: #ede9fe;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-hover: 0 8px 20px rgba(0,0,0,0.08);
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; }
+
+  .bdap-wrapper {
+    background: var(--bg);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .bdap-header {
+    margin-bottom: 28px;
+  }
+
+  .bdap-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.02em;
+  }
+
+  .bdap-header p {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .bdap-section {
+    margin-bottom: 28px;
+  }
+
+  .bdap-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .bdap-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .bdap-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-1px);
+  }
+
+  .bdap-summary-text {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--text-main);
+  }
+
+  .bdap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+  }
+
+  .bdap-takeaway-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .badge-high { background: var(--red-bg); color: #b91c1c; }
+  .badge-medium { background: var(--orange-bg); color: #b45309; }
+  .badge-low { background: var(--green-bg); color: #047857; }
+  .badge-conflict { background: var(--red-bg); color: #b91c1c; }
+  .badge-question { background: var(--purple-bg); color: #6d28d9; }
+  .badge-completed { background: var(--green-bg); color: #047857; }
+  .badge-pending { background: var(--orange-bg); color: #b45309; }
+
+  table.bdap-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  table.bdap-table th {
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-muted);
+    background: #fafafa;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  table.bdap-table td {
+    padding: 13px 14px;
+    font-size: 13.5px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  table.bdap-table tr:last-child td { border-bottom: none; }
+  table.bdap-table tr:hover td { background: #fafbff; }
+
+  .bdap-list-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+    margin-bottom: 10px;
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+
+  .bdap-list-card:last-child { margin-bottom: 0; }
+
+  .bdap-list-card .badge { margin-bottom: 6px; }
+
+  details.bdap-collapsible {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 14px 18px;
+    margin-bottom: 12px;
+  }
+
+  details.bdap-collapsible summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-main);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  details.bdap-collapsible summary::-webkit-details-marker { display: none; }
+
+  details.bdap-collapsible summary::after {
+    content: "+";
+    font-size: 18px;
+    color: var(--text-muted);
+    transition: transform 0.2s ease;
+  }
+
+  details.bdap-collapsible[open] summary::after {
+    transform: rotate(45deg);
+  }
+
+  .bdap-collapsible-body {
+    margin-top: 12px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-main);
+  }
+
+  .bdap-speaker-name {
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .bdap-note {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 6px;
+  }
+
+  @media (max-width: 640px) {
+    .bdap-wrapper { padding: 14px; }
+    table.bdap-table th, table.bdap-table td { padding: 9px 8px; font-size: 12.5px; }
+    .bdap-header h1 { font-size: 20px; }
+  }
+</style>
+
+<div class="bdap-wrapper">
+
+  <div class="bdap-header">
+    <h1>Quarterly Growth Strategy Meeting</h1>
+    <p>Transcript Mode — Structured breakdown generated from meeting transcript</p>
+  </div>
+
+  <!-- 1. Summary -->
+  <div class="bdap-section">
+    <div class="bdap-section-title">📋 Summary</div>
+    <div class="bdap-card">
+      <div class="bdap-summary-text">
+        The leadership team reviewed Q2 performance: revenue grew 12%, below the 18% annual target, mainly due to
+        enterprise deals slipping (9 of 14 expected large contracts closed). Website traffic rose 34%, though
+        conversion remains low, prompting a proposed website redesign — pending a cost estimate and architecture
+        review. Customer retention held at 94%, but rising support tickets tied to reporting performance and
+        dashboard loading times were flagged as a priority. Hiring decisions were postponed until Q3 forecasts are
+        finalized, and the customer conference budget was deferred pending vendor proposals. The team agreed to
+        avoid public commitments on the August analytics dashboard release until engineering completes its
+        milestone review.
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Key Takeaways -->
+  <div class="bdap-section">
+    <div class="bdap-section-title">✨ Key Takeaways</div>
+    <div class="bdap-grid">
+      <div class="bdap-takeaway-card"><span class="badge badge-medium">🟠 Medium Priority</span><br>Q2 revenue grew 12%, below the 18% annual target.</div>
+      <div class="bdap-takeaway-card"><span class="badge badge-high">🔴 High Priority</span><br>Only 9 of 14 expected enterprise contracts closed, due to procurement delays and added security reviews.</div>
+      <div class="bdap-takeaway-card"><span class="badge badge-low">🟢 Low Priority</span><br>Website traffic increased 34% vs. last quarter.</div>
+      <div class="bdap-takeaway-card"><span class="badge badge-medium">🟠 Medium Priority</span><br>Conversion rates remain lower than expected; redesign proposed.</div>
+      <div class="bdap-takeaway-card"><span class="badge badge-high">🔴 High Priority</span><br>Engineering is near capacity; adding website work may require contractors.</div>
+      <div class="bdap-takeaway-card"><span class="badge badge-low">🟢 Low Priority</span><br>Customer retention remains strong at 94%.</div>
+      <div class="bdap-takeaway-card"><span class="badge badge-high">🔴 High Priority</span><br>Rising support tickets tied to reporting performance and dashboard loading times — flagged as a priority issue.</div>
+      <div class="bdap-takeaway-card"><span class="badge badge-medium">🟠 Medium Priority</span><br>Hiring decisions postponed until Q3 forecasts are finalized.</div>
+    </div>
+  </div>
+
+  <!-- 3. Action Items -->
+  <div class="bdap-section">
+    <div class="bdap-section-title">✅ Action Items</div>
+    <table class="bdap-table">
+      <thead>
+        <tr><th>Task</th><th>Owner</th><th>Deadline</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Complete architecture review and provide cost estimate for website redesign / demo-process simplification</td><td>CTO / Engineering</td><td>Not specified</td><td><span class="badge badge-pending">⏳ Pending</span></td></tr>
+        <tr><td>Continue investigating reporting performance and dashboard loading time issues</td><td>CTO / Engineering</td><td>Not specified</td><td><span class="badge badge-pending">⏳ Pending</span></td></tr>
+        <tr><td>Finalize Q3 revenue forecasts before making hiring decisions</td><td>CFO</td><td>Not specified</td><td><span class="badge badge-pending">⏳ Pending</span></td></tr>
+        <tr><td>Submit final vendor proposals for the annual customer conference</td><td>Not specified</td><td>Not specified</td><td><span class="badge badge-pending">⏳ Pending</span></td></tr>
+        <tr><td>Revisit and approve customer conference budget once vendor proposals are received</td><td>CFO</td><td>Next month</td><td><span class="badge badge-pending">⏳ Pending</span></td></tr>
+        <tr><td>Complete milestone review for analytics dashboard before making public release commitments</td><td>CTO / Engineering</td><td>Not specified</td><td><span class="badge badge-pending">⏳ Pending</span></td></tr>
+        <tr><td>Follow up on open items</td><td>Leadership team</td><td>Next week's leadership meeting</td><td><span class="badge badge-pending">⏳ Pending</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 4. Open Questions -->
+  <div class="bdap-section">
+    <div class="bdap-section-title">❓ Open Questions</div>
+    <div class="bdap-list-card"><span class="badge badge-question">❓ Open Question</span><br>What is the cost estimate for the website redesign, and will additional contractors be needed?</div>
+    <div class="bdap-list-card"><span class="badge badge-question">❓ Open Question</span><br>Should the new analytics dashboard be announced at the customer conference?</div>
+    <div class="bdap-list-card"><span class="badge badge-question">❓ Open Question</span><br>Can engineering guarantee the August release date for the analytics dashboard? (CTO stated this cannot currently be guaranteed.)</div>
+    <div class="bdap-list-card"><span class="badge badge-question">❓ Open Question</span><br>What will next year's hiring plan look like, given differing headcount requests from department heads?</div>
+    <div class="bdap-list-card"><span class="badge badge-question">❓ Open Question</span><br>Will the customer conference budget be approved once vendor proposals arrive?</div>
+  </div>
+
+  <!-- 5. Risks / Blockers -->
+  <div class="bdap-section">
+    <div class="bdap-section-title">⚠️ Risks / Blockers</div>
+    <div class="bdap-list-card"><span class="badge badge-high">🔴 High Priority</span><br>Procurement delays and client-requested security reviews caused 5 of 14 expected enterprise deals to slip to next quarter.</div>
+    <div class="bdap-list-card"><span class="badge badge-high">🔴 High Priority</span><br>If slipped deals move again, the company may miss its annual revenue target (per CFO).</div>
+    <div class="bdap-list-card"><span class="badge badge-medium">🟠 Medium Priority</span><br>Engineering is already operating close to capacity due to the August analytics dashboard milestone; additional website redesign work may require contractors.</div>
+    <div class="bdap-list-card"><span class="badge badge-high">🔴 High Priority</span><br>Increasing support ticket volume driven by reporting performance and dashboard loading time complaints, also raised by prospects during sales calls.</div>
+    <div class="bdap-list-card"><span class="badge badge-medium">🟠 Medium Priority</span><br>Uncertainty around the August release date for the analytics dashboard could affect conference announcements and public commitments.</div>
+  </div>
+
+  <!-- 6. Conflicts -->
+  <div class="bdap-section">
+    <div class="bdap-section-title">⚠️ Conflicts</div>
+    <div class="bdap-list-card"><span class="badge badge-conflict">⚠️ Conflict</span><br>Department heads submitted differing headcount requests for next year's hiring plan; no resolution reached — decision postponed until Q3 forecasts finalize.</div>
+    <div class="bdap-list-card"><span class="badge badge-conflict">⚠️ Conflict</span><br>Resource conflict: engineering is focused on the August analytics dashboard milestone, while the proposed website redesign would also require engineering/contractor capacity.</div>
+  </div>
+
+  <!-- 7. Additional Notes -->
+  <div class="bdap-section">
+    <div class="bdap-section-title">🗒️ Additional Notes</div>
+    <div class="bdap-card">
+      <div class="bdap-summary-text">
+        Product Director noted that improving reporting performance may have a larger business impact than some planned feature releases. The CEO directed the team to avoid any public commitments regarding the dashboard release until engineering completes its milestone review. Open items will be revisited during next week's leadership meeting.
+      </div>
+    </div>
+  </div>
+
+  <!-- Transcript Mode: Speaker Summary -->
+  <div class="bdap-section">
+    <div class="bdap-section-title">🗣️ Speaker Summary</div>
+    <details class="bdap-collapsible" open>
+      <summary>View contributions by speaker</summary>
+      <div class="bdap-collapsible-body">
+        <p><span class="bdap-speaker-name">CEO:</span> Opened the meeting, flagged the revenue gap vs. target, asked clarifying questions on deal slippage, directed the team to get a cost estimate before approving spend, prioritized the reporting performance issue, postponed hiring decisions, deferred the conference budget, and blocked public commitments on the dashboard release date.</p>
+        <p><span class="bdap-speaker-name">Head of Sales:</span> Explained enterprise deal slippage (9 of 14 closed), cited procurement delays and client security reviews, and noted prospects raising reporting performance concerns during sales calls.</p>
+        <p><span class="bdap-speaker-name">CFO:</span> Raised concern about revenue forecast impact, asked for a cost estimate on website work, raised the hiring plan headcount conflict, and required final vendor proposals before approving the conference budget.</p>
+        <p><span class="bdap-speaker-name">VP Marketing:</span> Reported 34% traffic growth, acknowledged low conversion rates, proposed a website redesign and simplified demo-request process, and raised the conference budget approval request.</p>
+        <p><span class="bdap-speaker-name">Product Director:</span> Cautioned about engineering timeline conflicts with the August dashboard milestone, noted reporting performance may have larger business impact than some feature releases, and said the dashboard should only be announced if the August date is confident.</p>
+        <p><span class="bdap-speaker-name">CTO:</span> Confirmed engineering is near capacity, said additional contractors may be needed, noted the architecture review and cost estimate are not yet complete, confirmed the reporting/dashboard performance issue is known and being investigated, and stated the August release date cannot currently be guaranteed.</p>
+        <p><span class="bdap-speaker-name">Customer Success Lead:</span> Reported 94% retention and a significant increase in support ticket volume, attributing most complaints to reporting performance and dashboard loading times.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- Transcript Mode: Decisions by Speaker -->
+  <div class="bdap-section">
+    <div class="bdap-section-title">🧭 Decisions by Speaker</div>
+    <div class="bdap-list-card"><span class="bdap-speaker-name">CEO:</span> Directed that a cost estimate be obtained before approving additional spending on website work.</div>
+    <div class="bdap-list-card"><span class="bdap-speaker-name">CEO:</span> Postponed hiring decisions until Q3 forecasts are finalized.</div>
+    <div class="bdap-list-card"><span class="bdap-speaker-name">CEO:</span> Deferred the customer conference budget decision to next month, pending vendor proposals.</div>
+    <div class="bdap-list-card"><span class="bdap-speaker-name">CEO:</span> Decided to avoid public commitments on the analytics dashboard release until the milestone review is complete.</div>
+    <div class="bdap-list-card"><span class="bdap-speaker-name">CEO:</span> Declared reporting performance a priority issue.</div>
+  </div>
+
+  <!-- Transcript Mode: Action Items by Speaker -->
+  <div class="bdap-section">
+    <div class="bdap-section-title">📌 Action Items by Speaker</div>
+    <table class="bdap-table">
+      <thead>
+        <tr><th>Speaker</th><th>Action Item</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>CTO</td><td>Complete architecture review and produce a cost estimate for website redesign work</td></tr>
+        <tr><td>CTO</td><td>Continue investigating reporting performance and dashboard loading time issues</td></tr>
+        <tr><td>CFO</td><td>Finalize Q3 forecasts before revisiting hiring decisions</td></tr>
+        <tr><td>CFO</td><td>Review final vendor proposals before approving conference budget</td></tr>
+        <tr><td>Whole team</td><td>Follow up on open items at next week's leadership meeting</td></tr>
+      </tbody>
+    </table>
+    <div class="bdap-note">Note: The transcript does not specify who is responsible for submitting the vendor proposals themselves — attribution unclear.</div>
+  </div>
+
+  <!-- Attribution Notes -->
+  <div class="bdap-section">
+    <div class="bdap-section-title">🔎 Attribution Notes</div>
+    <div class="bdap-list-card">Ownership of "submit final vendor proposals" is not specified in the transcript — likely external vendors or VP Marketing's team, but this is not stated explicitly.</div>
+    <div class="bdap-list-card">No specific deadline was given for the architecture review, cost estimate, or reporting performance fix — all listed as "Not specified" per transcript content.</div>
+  </div>
+
+</div>
