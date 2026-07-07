@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Put Ziggy Back Together — A Face Puzzle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#171B26;
+    --cloud:#F4F4F9;
+    --cloud-dim:#C9CBD8;
+    --card:#EDE6DA;
+    --accent:#F7B733;
+    --accent-dim:#8a7139;
+    --good:#3FBF7F;
+    --radius-lg:22px;
+    --radius-sm:10px;
+    --shadow-deep: 0 18px 40px rgba(0,0,0,0.45);
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(255,255,255,0.05), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(255,255,255,0.04), transparent 45%),
+      var(--ink);
+    color:var(--cloud);
+    font-family:'Space Grotesk', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  body{
+    display:flex;
+    justify-content:center;
+    padding: clamp(20px, 4vw, 56px) 16px 60px;
+  }
+
+  .wrap{
+    width:100%;
+    max-width:1040px;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    text-align:center;
+    margin-bottom: clamp(22px, 4vw, 40px);
+  }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color: var(--accent);
+    font-weight:600;
+    margin-bottom:10px;
+    transition: color .25s ease;
+  }
+  .eyebrow::before, .eyebrow::after{
+    content:"";
+    width:20px; height:2px;
+    background: var(--accent);
+    opacity:0.6;
+    transition: background .25s ease;
+  }
+
+  h1{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:800;
+    font-size: clamp(32px, 6vw, 58px);
+    line-height:1.02;
+    margin:0 0 10px;
+    letter-spacing:0.5px;
+    color:var(--cloud);
+  }
+  h1 span{
+    color: var(--accent);
+    transition: color .25s ease;
+  }
+
+  .subtitle{
+    max-width:520px;
+    margin:0 auto;
+    color: var(--cloud-dim);
+    font-size: clamp(14px, 1.6vw, 16px);
+    line-height:1.5;
+  }
+
+  /* ---------- Layout: board + side panel ---------- */
+  .stage{
+    display:flex;
+    flex-wrap:wrap;
+    gap: clamp(20px, 3vw, 40px);
+    align-items:flex-start;
+    justify-content:center;
+  }
+
+  .board-column{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+    flex: 1 1 460px;
+    max-width:520px;
+  }
+
+  /* ---------- The poster card behind the puzzle ---------- */
+  .poster-card{
+    position:relative;
+    width:100%;
+    max-width:460px;
+    aspect-ratio:1/1;
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    transform: rotate(-1.3deg);
+    box-shadow: var(--shadow-deep);
+    padding: 14px;
+  }
+  .poster-card::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:var(--radius-lg);
+    box-shadow: inset 0 0 0 2px rgba(23,27,38,0.08);
+    pointer-events:none;
+  }
+  .poster-tape{
+    position:absolute;
+    top:-14px; left:50%;
+    transform: translateX(-50%) rotate(-3deg);
+    width:96px; height:30px;
+    background: rgba(244,244,249,0.55);
+    border: 1px solid rgba(23,27,38,0.15);
+    border-radius:3px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  }
+
+  #board-outer{
+    position:relative;
+    width:100%;
+    height:100%;
+    border-radius: calc(var(--radius-lg) - 8px);
+    overflow:hidden;
+    background: var(--ink);
+    outline: none;
+  }
+  #board-outer:focus-visible{
+    box-shadow: 0 0 0 3px var(--accent), 0 0 0 7px rgba(23,27,38,0.4);
+  }
+
+  #board{
+    position:absolute;
+    inset:0;
+  }
+
+  .tile{
+    position:absolute;
+    padding:0;
+    margin:0;
+    border: 2px solid rgba(23,27,38,0.85);
+    border-radius: 6px;
+    background-color: var(--card);
+    background-repeat:no-repeat;
+    cursor:pointer;
+    outline:none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .tile{ transition: left .16s ease, top .16s ease, box-shadow .16s ease, transform .12s ease; }
+  }
+  .tile:hover{ box-shadow: 0 4px 10px rgba(0,0,0,0.35); }
+  .tile:active{ transform: scale(0.97); }
+  .tile:focus-visible{
+    box-shadow: 0 0 0 3px var(--accent);
+    z-index:5;
+  }
+  .tile.blank{
+    background: transparent !important;
+    border-color: transparent;
+    box-shadow: none;
+    cursor:default;
+    pointer-events:none;
+  }
+  .tile .num{
+    position:absolute;
+    top:3px; left:5px;
+    font-size:11px;
+    font-weight:700;
+    color: var(--cloud);
+    background: rgba(23,27,38,0.55);
+    padding:1px 5px;
+    border-radius:5px;
+    pointer-events:none;
+    opacity:0;
+    transition: opacity .15s ease;
+  }
+  #board.show-numbers .tile .num{ opacity:1; }
+
+  #peek-overlay{
+    position:absolute;
+    inset:0;
+    background-size:cover;
+    background-position:center;
+    opacity:0;
+    pointer-events:none;
+    border-radius: calc(var(--radius-lg) - 8px);
+  }
+  @media (prefers-reduced-motion: no-preference){
+    #peek-overlay{ transition: opacity .18s ease; }
+  }
+  #peek-overlay.active{ opacity:0.97; }
+
+  /* ---------- Controls ---------- */
+  .control-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    justify-content:center;
+    width:100%;
+  }
+
+  .pillgroup{
+    display:inline-flex;
+    background: rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.09);
+    border-radius:999px;
+    padding:4px;
+    gap:2px;
+  }
+  .pill{
+    border:none;
+    background:transparent;
+    color: var(--cloud-dim);
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:13px;
+    padding:8px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    transition: background .15s ease, color .15s ease;
+  }
+  .pill:hover{ color: var(--cloud); }
+  .pill.active{
+    background: var(--accent);
+    color: var(--ink);
+  }
+  .pill:focus-visible{ box-shadow:0 0 0 2px var(--accent); }
+
+  .swatch{
+    width:28px; height:28px;
+    border-radius:50%;
+    border:2px solid rgba(255,255,255,0.3);
+    cursor:pointer;
+    padding:0;
+    transition: transform .15s ease, border-color .15s ease;
+  }
+  .swatch:hover{ transform: scale(1.08); }
+  .swatch.active{ border-color:#fff; box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--accent); }
+  .swatch:focus-visible{ outline:none; box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--accent); }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    border:none;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:14px;
+    padding:11px 20px;
+    border-radius:999px;
+    cursor:pointer;
+    transition: transform .12s ease, filter .15s ease;
+  }
+  .btn:active{ transform: scale(0.96); }
+  .btn-primary{ background: var(--accent); color: var(--ink); }
+  .btn-primary:hover{ filter:brightness(1.08); }
+  .btn-ghost{
+    background: transparent;
+    color: var(--cloud);
+    border:1px solid rgba(255,255,255,0.25);
+  }
+  .btn-ghost:hover{ background: rgba(255,255,255,0.08); }
+  .btn:focus-visible{ box-shadow:0 0 0 2px var(--ink), 0 0 0 4px var(--accent); }
+
+  label.numtoggle{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-size:13px;
+    color: var(--cloud-dim);
+    cursor:pointer;
+    user-select:none;
+  }
+  label.numtoggle input{ accent-color: var(--accent); width:15px; height:15px; }
+
+  /* ---------- Side panel: scoreboard ---------- */
+  .side-column{
+    flex: 0 1 220px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    min-width:180px;
+  }
+
+  .tag{
+    background: var(--card);
+    color: var(--ink);
+    border-radius: var(--radius-sm);
+    padding:16px 18px;
+    box-shadow: var(--shadow-deep);
+    position:relative;
+  }
+  .tag::before{
+    content:"";
+    position:absolute;
+    top:-8px; left:18px;
+    width:14px; height:14px;
+    background: var(--ink);
+    border-radius:50%;
+    box-shadow: inset 0 0 0 3px var(--card);
+  }
+  .tag .label{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    font-weight:700;
+    opacity:0.55;
+    margin-bottom:4px;
+  }
+  .tag .value{
+    font-family:'Baloo 2', sans-serif;
+    font-size: 30px;
+    font-weight:700;
+    font-variant-numeric: tabular-nums;
+  }
+  .tag .best{
+    font-size:12px;
+    opacity:0.6;
+    margin-top:2px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hint{
+    font-size:12.5px;
+    color: var(--cloud-dim);
+    line-height:1.5;
+    padding: 0 4px;
+  }
+  .hint b{ color: var(--cloud); }
+
+  /* ---------- Win overlay ---------- */
+  #win-overlay{
+    position:fixed;
+    inset:0;
+    background: rgba(23,27,38,0.72);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:50;
+    opacity:0;
+    pointer-events:none;
+    backdrop-filter: blur(3px);
+  }
+  @media (prefers-reduced-motion: no-preference){
+    #win-overlay{ transition: opacity .25s ease; }
+  }
+  #win-overlay.show{ opacity:1; pointer-events:auto; }
+
+  .win-card{
+    background: var(--card);
+    color: var(--ink);
+    border-radius: var(--radius-lg);
+    padding: 34px 30px;
+    max-width:360px;
+    width:90%;
+    text-align:center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    position:relative;
+    overflow:hidden;
+  }
+  .win-card h2{
+    font-family:'Baloo 2', sans-serif;
+    font-size:28px;
+    margin:6px 0 4px;
+  }
+  .win-card p{ margin:0 0 18px; opacity:0.75; font-size:14px; }
+  .win-stats{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    margin-bottom:20px;
+  }
+  .win-stats div{ font-size:13px; opacity:0.7; }
+  .win-stats strong{
+    display:block;
+    font-family:'Baloo 2',sans-serif;
+    font-size:22px;
+    color: var(--ink);
+    opacity:1;
+  }
+
+  .confetti-piece{
+    position:absolute;
+    top:-10%;
+    width:8px; height:14px;
+    opacity:0.9;
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .confetti-piece{ animation: fall linear forwards; }
+  }
+  @keyframes fall{
+    to{ transform: translateY(420px) rotate(540deg); opacity:0; }
+  }
+
+  footer{
+    text-align:center;
+    margin-top:40px;
+    font-size:12px;
+    color: rgba(244,244,249,0.3);
+  }
+
+  @media (max-width: 640px){
+    .stage{ flex-direction:column-reverse; align-items:center; }
+    .side-column{ flex-direction:row; width:100%; max-width:460px; }
+    .tag{ flex:1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow" id="eyebrow-tag">poster puzzle · reassemble the face</div>
+    <h1>Put <span id="char-name">Ziggy</span> back together</h1>
+    <p class="subtitle">The picture's been shattered into sliding tiles. Nudge them into place, one slide at a time, and see the face again.</p>
+  </header>
+
+  <div class="stage">
+    <div class="board-column">
+      <div class="poster-card">
+        <div class="poster-tape"></div>
+        <div id="board-outer" tabindex="0" aria-label="Sliding face puzzle. Click a tile next to the empty gap to slide it, or use arrow keys.">
+          <div id="board"></div>
+          <div id="peek-overlay"></div>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <div class="pillgroup" role="group" aria-label="Difficulty">
+          <button class="pill" data-size="3">Easy 3×3</button>
+          <button class="pill active" data-size="4">Medium 4×4</button>
+          <button class="pill" data-size="5">Hard 5×5</button>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <div class="pillgroup" role="group" aria-label="Choose a face">
+          <button class="swatch active" data-skin="sunny" style="background:#F7B733" aria-label="Sunny"></button>
+          <button class="swatch" data-skin="marina" style="background:#1B998B" aria-label="Marina"></button>
+          <button class="swatch" data-skin="berry" style="background:#6A4C93" aria-label="Berry"></button>
+        </div>
+        <button class="btn btn-primary" id="shuffle-btn">🔀 Shuffle</button>
+        <button class="btn btn-ghost" id="peek-btn">👀 Peek</button>
+        <label class="numtoggle"><input type="checkbox" id="numtoggle">Show numbers</label>
+      </div>
+    </div>
+
+    <div class="side-column">
+      <div class="tag">
+        <div class="label">Moves</div>
+        <div class="value" id="moves-value">0</div>
+        <div class="best" id="moves-best">Best: —</div>
+      </div>
+      <div class="tag">
+        <div class="label">Time</div>
+        <div class="value" id="time-value">0:00</div>
+        <div class="best" id="time-best">Best: —</div>
+      </div>
+      <p class="hint"><b>How to play:</b> click a tile touching the empty gap to slide it in. Arrow keys move the gap too. Hold <b>Peek</b> to steal a glance at the finished face.</p>
+    </div>
+  </div>
+
+  <footer>No two shuffles are the same — every puzzle is solvable.</footer>
+</div>
+
+<div id="win-overlay">
+  <div class="win-card" id="win-card">
+    <div style="font-size:40px;" id="win-emoji">🎉</div>
+    <h2>Face restored!</h2>
+    <p>You put <span id="win-name">Ziggy</span> back together.</p>
+    <div class="win-stats">
+      <div>Moves<strong id="win-moves">0</strong></div>
+      <div>Time<strong id="win-time">0:00</strong></div>
+    </div>
+    <button class="btn btn-primary" id="play-again-btn">Play again</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============ SKIN PALETTES ============ */
+  const SKINS = {
+    sunny: {
+      bg:'#F7B733', glow:'#FFD98A', face:'#FFE3B3', hair:'#20314F', hairShade:'#182642',
+      cheek:'#FF6F59', mouth:'#20314F', outline:'#171B26', pom:'#FF6F59', accent:'#F7B733'
+    },
+    marina: {
+      bg:'#1B998B', glow:'#57C9BC', face:'#FFD9B3', hair:'#0D3B4A', hairShade:'#082A35',
+      cheek:'#F45B69', mouth:'#0D3B4A', outline:'#0A1A1F', pom:'#F4B942', accent:'#3FCBB8'
+    },
+    berry: {
+      bg:'#6A4C93', glow:'#9B7FC2', face:'#FFDCC4', hair:'#2E1F47', hairShade:'#211636',
+      cheek:'#E94F37', mouth:'#2E1F47', outline:'#1A1030', pom:'#F7B733', accent:'#A084D1'
+    }
+  };
+
+  /* ============ DRAW THE FACE ============ */
+  function drawFace(ctx, W, H, s){
+    ctx.clearRect(0,0,W,H);
+    // background
+    ctx.fillStyle = s.bg;
+    ctx.fillRect(0,0,W,H);
+
+    const cx = W*0.5, cy = H*0.53;
+
+    // soft glow behind head
+    const grad = ctx.createRadialGradient(cx,cy-20,10, cx,cy-20, W*0.42);
+    grad.addColorStop(0, s.glow);
+    grad.addColorStop(1, s.bg);
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(cx, cy-20, W*0.42, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.lineWidth = W*0.011;
+    ctx.strokeStyle = s.outline;
+    ctx.lineJoin = 'round';
+
+    // ears
+    [-1,1].forEach(dir=>{
+      ctx.fillStyle = s.face;
+      ctx.beginPath();
+      ctx.arc(cx + dir*W*0.265, cy+H*0.015, W*0.07, 0, Math.PI*2);
+      ctx.fill(); ctx.stroke();
+    });
+
+    // head
+    ctx.fillStyle = s.face;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, W*0.29, H*0.32, 0, 0, Math.PI*2);
+    ctx.fill(); ctx.stroke();
+
+    // beanie / hair cap
+    ctx.fillStyle = s.hair;
+    ctx.beginPath();
+    ctx.moveTo(cx - W*0.30, cy - H*0.02);
+    ctx.quadraticCurveTo(cx - W*0.31, cy - H*0.34, cx, cy - H*0.36);
+    ctx.quadraticCurveTo(cx + W*0.31, cy - H*0.34, cx + W*0.30, cy - H*0.02);
+    ctx.quadraticCurveTo(cx + W*0.16, cy - H*0.09, cx, cy - H*0.075);
+    ctx.quadraticCurveTo(cx - W*0.16, cy - H*0.09, cx - W*0.30, cy - H*0.02);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+
+    // beanie fold band
+    ctx.fillStyle = s.hairShade;
+    ctx.beginPath();
+    ctx.moveTo(cx - W*0.295, cy - H*0.035);
+    ctx.quadraticCurveTo(cx, cy - H*0.10, cx + W*0.295, cy - H*0.035);
+    ctx.quadraticCurveTo(cx + W*0.16, cy - H*0.005, cx, cy + H*0.01);
+    ctx.quadraticCurveTo(cx - W*0.16, cy - H*0.005, cx - W*0.295, cy - H*0.035);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+
+    // pom pom
+    ctx.fillStyle = s.pom;
+    ctx.beginPath();
+    ctx.arc(cx, cy - H*0.365, W*0.045, 0, Math.PI*2);
+    ctx.fill(); ctx.stroke();
+
+    // eyebrows
+    ctx.strokeStyle = s.outline;
+    ctx.lineWidth = W*0.018;
+    ctx.lineCap = 'round';
+    [-1,1].forEach(dir=>{
+      ctx.beginPath();
+      ctx.moveTo(cx + dir*W*0.145, cy - H*0.115);
+      ctx.quadraticCurveTo(cx + dir*W*0.095, cy - H*0.145, cx + dir*W*0.045, cy - H*0.118);
+      ctx.stroke();
+    });
+
+    // eyes
+    ctx.lineWidth = W*0.009;
+    [-1,1].forEach(dir=>{
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath();
+      ctx.ellipse(cx + dir*W*0.095, cy - H*0.03, W*0.052, H*0.062, 0, 0, Math.PI*2);
+      ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = s.outline;
+      ctx.beginPath();
+      ctx.arc(cx + dir*W*0.10, cy - H*0.045, W*0.024, 0, Math.PI*2);
+      ctx.fill();
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath();
+      ctx.arc(cx + dir*W*0.108, cy - H*0.058, W*0.008, 0, Math.PI*2);
+      ctx.fill();
+    });
+
+    // blush
+    ctx.globalAlpha = 0.5;
+    ctx.fillStyle = s.cheek;
+    [-1,1].forEach(dir=>{
+      ctx.beginPath();
+      ctx.ellipse(cx + dir*W*0.185, cy + H*0.075, W*0.042, H*0.026, 0, 0, Math.PI*2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+
+    // freckles
+    ctx.fillStyle = s.outline;
+    ctx.globalAlpha = 0.35;
+    const freckleOffsets = [[-0.14,0.03],[-0.10,0.045],[-0.06,0.03],[0.06,0.03],[0.10,0.045],[0.14,0.03]];
+    freckleOffsets.forEach(o=>{
+      ctx.beginPath();
+      ctx.arc(cx + o[0]*W, cy + o[1]*H + H*0.03, W*0.006, 0, Math.PI*2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+
+    // nose
+    ctx.strokeStyle = s.outline;
+    ctx.lineWidth = W*0.012;
+    ctx.beginPath();
+    ctx.moveTo(cx - W*0.012, cy + H*0.02);
+    ctx.quadraticCurveTo(cx - W*0.02, cy + H*0.055, cx + W*0.012, cy + H*0.06);
+    ctx.stroke();
+
+    // mouth
+    ctx.fillStyle = s.mouth;
+    ctx.beginPath();
+    ctx.moveTo(cx - W*0.10, cy + H*0.12);
+    ctx.quadraticCurveTo(cx, cy + H*0.185, cx + W*0.10, cy + H*0.12);
+    ctx.quadraticCurveTo(cx, cy + H*0.155, cx - W*0.10, cy + H*0.12);
+    ctx.closePath();
+    ctx.fill();
+    ctx.lineWidth = W*0.011;
+    ctx.stroke();
+
+    // gap-tooth
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(cx - W*0.012, cy + H*0.125, W*0.024, H*0.02);
+  }
+
+  /* ============ PUZZLE STATE ============ */
+  const boardOuter = document.getElementById('board-outer');
+  const boardEl = document.getElementById('board');
+  const peekOverlay = document.getElementById('peek-overlay');
+  const numToggle = document.getElementById('numtoggle');
+
+  let n = 4;                 // grid size
+  let skinKey = 'sunny';
+  let piecePos = [];         // piecePos[pieceId] = position index
+  let blankId = 0;           // id of the blank piece (always n*n-1)
+  let moves = 0;
+  let seconds = 0;
+  let timerHandle = null;
+  let started = false;
+  let won = false;
+  let lastBlankPos = -1;
+
+  const bestMoves = {3:null,4:null,5:null};
+  const bestTime = {3:null,4:null,5:null};
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 720; canvas.height = 720;
+  const ctx = canvas.getContext('2d');
+
+  function redrawCanvas(){
+    drawFace(ctx, canvas.width, canvas.height, SKINS[skinKey]);
+    return canvas.toDataURL('image/png');
+  }
+
+  function rowColOf(pos){ return { row: Math.floor(pos/n), col: pos % n }; }
+  function posOf(row,col){ return row*n + col; }
+
+  function buildTiles(){
+    boardEl.innerHTML = '';
+    blankId = n*n - 1;
+    piecePos = [];
+    for(let i=0;i<n*n;i++) piecePos[i] = i;
+
+    const dataUrl = redrawCanvas();
+    peekOverlay.style.backgroundImage = `url(${dataUrl})`;
+
+    for(let k=0;k<n*n;k++){
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'tile' + (k===blankId ? ' blank' : '');
+      btn.dataset.piece = k;
+      btn.setAttribute('aria-label', k===blankId ? 'Empty gap' : ('Piece ' + (k+1)));
+
+      if(k !== blankId){
+        const {row,col} = rowColOf(k);
+        btn.style.backgroundImage = `url(${dataUrl})`;
+        btn.style.backgroundSize = `${n*100}% ${n*100}%`;
+        btn.style.backgroundPosition = `${n===1?0:(col/(n-1))*100}% ${n===1?0:(row/(n-1))*100}%`;
+        const tag = document.createElement('span');
+        tag.className = 'num';
+        tag.textContent = k+1;
+        btn.appendChild(tag);
+      }
+
+      btn.addEventListener('click', ()=> attemptMove(k));
+      boardEl.appendChild(btn);
+    }
+    layoutTiles();
+  }
+
+  function layoutTiles(){
+    const size = 100/n;
+    Array.from(boardEl.children).forEach(btn=>{
+      const k = parseInt(btn.dataset.piece,10);
+      const pos = piecePos[k];
+      const {row,col} = rowColOf(pos);
+      btn.style.width = size + '%';
+      btn.style.height = size + '%';
+      btn.style.left = (col*size) + '%';
+      btn.style.top = (row*size) + '%';
+    });
+  }
+
+  function refreshBackgroundsOnly(){
+    const dataUrl = redrawCanvas();
+    peekOverlay.style.backgroundImage = `url(${dataUrl})`;
+    Array.from(boardEl.children).forEach(btn=>{
+      const k = parseInt(btn.dataset.piece,10);
+      if(k === blankId) return;
+      btn.style.backgroundImage = `url(${dataUrl})`;
+    });
+  }
+
+  function isAdjacent(posA, posB){
+    const a = rowColOf(posA), b = rowColOf(posB);
+    return (a.row===b.row && Math.abs(a.col-b.col)===1) ||
+           (a.col===b.col && Math.abs(a.row-b.row)===1);
+  }
+
+  function blankPos(){ return piecePos[blankId]; }
+
+  function swapPieceWithBlank(pieceId){
+    const p1 = piecePos[pieceId];
+    const p2 = piecePos[blankId];
+    piecePos[pieceId] = p2;
+    piecePos[blankId] = p1;
+  }
+
+  function attemptMove(pieceId, silent){
+    if(won || pieceId===blankId) return false;
+    const p = piecePos[pieceId];
+    if(!isAdjacent(p, blankPos())) return false;
+    swapPieceWithBlank(pieceId);
+    layoutTiles();
+    if(!silent){
+      moves++;
+      updateMovesDisplay();
+      if(!started){ startTimer(); }
+      checkWin();
+    }
+    return true;
+  }
+
+  function isSolved(){
+    for(let k=0;k<n*n;k++){ if(piecePos[k] !== k) return false; }
+    return true;
+  }
+
+  function checkWin(){
+    if(isSolved()){
+      won = true;
+      stopTimer();
+      showWin();
+    }
+  }
+
+  /* ---------- shuffle ---------- */
+  function shuffle(){
+    won = false;
+    for(let k=0;k<n*n;k++) piecePos[k]=k;
+    let prevBlank = -1;
+    const steps = n*n*45;
+    for(let i=0;i<steps;i++){
+      const bp = blankPos();
+      const {row,col} = rowColOf(bp);
+      const candidates = [];
+      if(row>0) candidates.push(posOf(row-1,col));
+      if(row<n-1) candidates.push(posOf(row+1,col));
+      if(col>0) candidates.push(posOf(row,col-1));
+      if(col<n-1) candidates.push(posOf(row,col+1));
+      const filtered = candidates.filter(c=>c!==prevBlank);
+      const pick = (filtered.length? filtered : candidates)[Math.floor(Math.random()*(filtered.length?filtered.length:candidates.length))];
+      // find piece currently at 'pick' and swap with blank
+      const pieceAtPick = piecePos.indexOf(pick);
+      prevBlank = bp;
+      swapPieceWithBlank(pieceAtPick);
+    }
+    if(isSolved()){
+      // extremely unlikely safety net
+      const bp = blankPos();
+      const {row,col} = rowColOf(bp);
+      const nb = row>0? posOf(row-1,col) : posOf(row+1,col);
+      swapPieceWithBlank(piecePos.indexOf(nb));
+    }
+    layoutTiles();
+    moves = 0;
+    seconds = 0;
+    started = false;
+    updateMovesDisplay();
+    updateTimeDisplay();
+    stopTimer();
+  }
+
+  /* ---------- timer ---------- */
+  function startTimer(){
+    started = true;
+    timerHandle = setInterval(()=>{
+      seconds++;
+      updateTimeDisplay();
+    }, 1000);
+  }
+  function stopTimer(){
+    if(timerHandle){ clearInterval(timerHandle); timerHandle = null; }
+  }
+  function fmtTime(s){
+    const m = Math.floor(s/60), r = s%60;
+    return m + ':' + String(r).padStart(2,'0');
+  }
+  function updateTimeDisplay(){
+    document.getElementById('time-value').textContent = fmtTime(seconds);
+  }
+  function updateMovesDisplay(){
+    document.getElementById('moves-value').textContent = moves;
+  }
+  function updateBestDisplays(){
+    const bm = bestMoves[n], bt = bestTime[n];
+    document.getElementById('moves-best').textContent = 'Best: ' + (bm===null? '—' : bm);
+    document.getElementById('time-best').textContent = 'Best: ' + (bt===null? '—' : fmtTime(bt));
+  }
+
+  /* ---------- win overlay ---------- */
+  function showWin(){
+    if(bestMoves[n]===null || moves < bestMoves[n]) bestMoves[n] = moves;
+    if(bestTime[n]===null || seconds < bestTime[n]) bestTime[n] = seconds;
+    updateBestDisplays();
+
+    document.getElementById('win-moves').textContent = moves;
+    document.getElementById('win-time').textContent = fmtTime(seconds);
+    document.getElementById('win-name').textContent = document.getElementById('char-name').textContent;
+
+    const overlay = document.getElementById('win-overlay');
+    overlay.classList.add('show');
+    spawnConfetti();
+  }
+  function hideWin(){
+    document.getElementById('win-overlay').classList.remove('show');
+    document.querySelectorAll('.confetti-piece').forEach(el=>el.remove());
+  }
+  function spawnConfetti(){
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduced) return;
+    const card = document.getElementById('win-card');
+    const colors = [SKINS[skinKey].bg, SKINS[skinKey].pom, SKINS[skinKey].cheek, SKINS[skinKey].hair, '#FFFFFF'];
+    for(let i=0;i<36;i++){
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      p.style.left = Math.random()*100 + '%';
+      p.style.background = colors[Math.floor(Math.random()*colors.length)];
+      p.style.animationDuration = (1.1 + Math.random()*1.1) + 's';
+      p.style.animationDelay = (Math.random()*0.4) + 's';
+      p.style.transform = 'rotate(' + Math.floor(Math.random()*360) + 'deg)';
+      card.appendChild(p);
+    }
+  }
+
+  /* ---------- keyboard control ---------- */
+  boardOuter.addEventListener('keydown', (e)=>{
+    const key = e.key;
+    if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(key)) return;
+    e.preventDefault();
+    const bp = blankPos();
+    const {row,col} = rowColOf(bp);
+    let target = null;
+    if(key==='ArrowUp' && row < n-1) target = posOf(row+1,col);
+    if(key==='ArrowDown' && row > 0) target = posOf(row-1,col);
+    if(key==='ArrowLeft' && col < n-1) target = posOf(row,col+1);
+    if(key==='ArrowRight' && col > 0) target = posOf(row,col-1);
+    if(target===null) return;
+    const pieceId = piecePos.indexOf(target);
+    attemptMove(pieceId);
+  });
+
+  /* ---------- peek ---------- */
+  function peekOn(){ peekOverlay.classList.add('active'); }
+  function peekOff(){ peekOverlay.classList.remove('active'); }
+  const peekBtn = document.getElementById('peek-btn');
+  ['mousedown','touchstart'].forEach(ev=> peekBtn.addEventListener(ev, (e)=>{ e.preventDefault(); peekOn(); }));
+  ['mouseup','mouseleave','touchend','touchcancel'].forEach(ev=> peekBtn.addEventListener(ev, peekOff));
+
+  /* ---------- controls wiring ---------- */
+  document.querySelectorAll('.pill[data-size]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.pill[data-size]').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      n = parseInt(btn.dataset.size,10);
+      hideWin();
+      buildTiles();
+      shuffle();
+      updateBestDisplays();
+    });
+  });
+
+  document.querySelectorAll('.swatch').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.swatch').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      skinKey = btn.dataset.skin;
+      const names = { sunny:'Ziggy', marina:'Marina', berry:'Berry' };
+      document.getElementById('char-name').textContent = names[skinKey];
+      document.documentElement.style.setProperty('--accent', SKINS[skinKey].accent);
+      refreshBackgroundsOnly();
+    });
+  });
+
+  document.getElementById('shuffle-btn').addEventListener('click', ()=>{
+    hideWin();
+    shuffle();
+  });
+
+  document.getElementById('play-again-btn').addEventListener('click', ()=>{
+    hideWin();
+    shuffle();
+  });
+
+  numToggle.addEventListener('change', ()=>{
+    boardEl.classList.toggle('show-numbers', numToggle.checked);
+  });
+
+  window.addEventListener('resize', layoutTiles);
+
+  /* ---------- init ---------- */
+  buildTiles();
+  shuffle();
+  updateBestDisplays();
+})();
+</script>
+</body>
+</html>
