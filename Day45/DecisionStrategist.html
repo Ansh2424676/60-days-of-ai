@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Report — Data Analyst vs AI Prompt Engineering</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-main: #0f0f14;
+    --bg-card: #1a1a24;
+    --bg-card-alt: #1e1e2e;
+    --text-primary: #f0f0f5;
+    --text-secondary: #8888a0;
+    --accent-green: #34d399;
+    --accent-red: #f87171;
+    --accent-blue: #60a5fa;
+    --accent-gold: #fbbf24;
+    --accent-purple: #a78bfa;
+    --border-subtle: rgba(255,255,255,0.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg-main);
+    color: var(--text-primary);
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    padding: 32px 16px 60px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+
+  header.banner {
+    text-align: center;
+    padding: 24px 16px 32px;
+  }
+  header.banner h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+  }
+  header.banner .subtitle {
+    margin-top: 8px;
+    font-size: 16px;
+    color: var(--text-secondary);
+  }
+  header.banner .date {
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .gradient-line {
+    height: 2px;
+    margin-top: 20px;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple), var(--accent-gold));
+    border-radius: 2px;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 28px;
+    margin-top: 28px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease;
+    border-left: 4px solid var(--accent-blue);
+  }
+  .card:hover { transform: translateY(-2px); }
+
+  .card.green { border-left-color: var(--accent-green); }
+  .card.purple { border-left-color: var(--accent-purple); }
+  .card.red { border-left-color: var(--accent-red); }
+  .card.gold {
+    border-left-color: var(--accent-gold);
+    background: var(--bg-card-alt);
+    padding: 34px 28px;
+    box-shadow: 0 0 20px rgba(251,191,36,0.15), 0 4px 24px rgba(0,0,0,0.3);
+  }
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .section-title.blue { color: var(--accent-blue); }
+  .section-title.green { color: var(--accent-green); }
+  .section-title.purple { color: var(--accent-purple); }
+  .section-title.red { color: var(--accent-red); }
+  .section-title.gold { color: var(--accent-gold); }
+
+  p, li { font-size: 15px; line-height: 1.7; color: var(--text-primary); }
+  .label {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-top: 16px;
+    margin-bottom: 4px;
+  }
+  .label:first-child { margin-top: 0; }
+
+  /* Option cards inside Section 2 */
+  .option-block {
+    background: var(--bg-card-alt);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 16px;
+  }
+  .option-block:first-child { margin-top: 0; }
+  .option-name {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .option-name.opt-a { color: var(--accent-blue); }
+  .option-name.opt-b { color: var(--accent-green); }
+
+  ul { padding-left: 18px; margin-top: 4px; }
+  li { margin-bottom: 4px; }
+
+  /* Matrix */
+  .matrix-row { margin-top: 14px; }
+  .matrix-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .bar-set { display: flex; flex-direction: column; gap: 6px; }
+  .bar-container {
+    height: 28px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    color: white;
+    font-weight: 700;
+    font-size: 13px;
+    width: 0%;
+    animation: growBar 0.8s ease-out forwards;
+  }
+  .bar-fill.opt-a { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+  .bar-fill.opt-b { background: linear-gradient(90deg, #34d399, #10b981); }
+
+  @keyframes growBar {
+    from { width: 0%; }
+  }
+
+  .total-row {
+    margin-top: 20px;
+    padding: 16px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+  }
+  .total-row .matrix-label { font-size: 15px; font-weight: 700; color: var(--text-primary); text-transform: uppercase; }
+
+  .winner-tag {
+    display: inline-block;
+    background: rgba(251,191,36,0.15);
+    color: var(--accent-gold);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-left: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Premortem */
+  .premortem-block {
+    background: var(--bg-card-alt);
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 14px;
+  }
+  .premortem-block:first-child { margin-top: 0; }
+
+  /* 7 day plan */
+  .day-row {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .day-row:last-child { border-bottom: none; }
+  .day-num {
+    color: var(--accent-green);
+    font-weight: 700;
+    font-size: 13px;
+    min-width: 60px;
+  }
+
+  /* Verdict */
+  .verdict-name {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--accent-gold);
+    margin-bottom: 12px;
+  }
+  .hard-truth {
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-top: 16px;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 16px;
+  }
+
+  /* Shareable cards */
+  .share-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .mini-card {
+    background: var(--bg-card-alt);
+    border-radius: 12px;
+    padding: 16px;
+    flex: 1 1 200px;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 180px;
+  }
+  .mini-card h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+  .mini-card .big { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .mini-card .score { font-size: 13px; color: var(--text-secondary); }
+  .watermark {
+    font-size: 10px;
+    color: var(--text-secondary);
+    margin-top: 12px;
+    opacity: 0.7;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 12px;
+    margin-top: 40px;
+  }
+
+  @media (max-width: 600px) {
+    .card { padding: 20px 16px; }
+    header.banner h1 { font-size: 24px; }
+    .share-row { flex-direction: column; }
+    .verdict-name { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <h1>DECISION REPORT</h1>
+    <div class="subtitle">Data Analyst vs. AI Prompt Engineering</div>
+    <div class="date">July 31, 2026</div>
+    <div class="gradient-line"></div>
+  </header>
+
+  <!-- SECTION 1 -->
+  <div class="card blue">
+    <div class="section-title blue">The Real Decision</div>
+    <p>This isn't really "Data Analyst vs Prompt Engineering" — it's <strong>proven demand now vs. speculative upside later</strong>, with only 4 months to place a bet. The trade-off is job-readiness speed against a hedge on where the market moves next. It's hard because your gut already picked Data Analyst, but fear of missing the AI wave is overriding it.</p>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="card green">
+    <div class="section-title green">The Case For Each Option</div>
+
+    <div class="option-block">
+      <div class="option-name opt-a">Option A — Data Analyst</div>
+      <div class="label">Strongest Case</div>
+      <p>More job openings right now, a well-defined hiring path, and you already have MCA, BSc(IT), Data Analytics, SQL, and ML certifications plus internship experience — you're close to job-ready, not starting cold.</p>
+      <div class="label">Hidden Upside</div>
+      <p>Data Analyst roles are a stable entry point into almost any tech-adjacent career later, including AI-facing roles — the data skills don't expire.</p>
+      <div class="label">Biggest Weakness</div>
+      <p>Feels less "cutting edge," and you may worry it caps your ceiling if AI reshapes analyst work.</p>
+      <div class="label">Best If You Value</div>
+      <p>Speed to a job, stability, and building on what you've already certified in.</p>
+    </div>
+
+    <div class="option-block">
+      <div class="option-name opt-b">Option B — AI Prompt Engineering</div>
+      <div class="label">Strongest Case</div>
+      <p>You already have real, tangible proof of this skill — you've facilitated AI workshops on prompt engineering, agents, and no-code tools, and built a portfolio of interactive AI-related apps.</p>
+      <div class="label">Hidden Upside</div>
+      <p>If the field keeps growing, being early gives you a credibility edge most late-arrivers won't have.</p>
+      <div class="label">Biggest Weakness</div>
+      <p>Fewer defined job titles and hiring pipelines right now — within a 4-month window, this is a real risk, not just a feeling.</p>
+      <div class="label">Best If You Value</div>
+      <p>Long-term positioning and being ahead of a trend, even if it costs job-search speed today.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="card purple">
+    <div class="section-title purple">Assumption Buster</div>
+    <div class="label">Assumptions You May Be Making</div>
+    <ul>
+      <li>That it has to be one or the other, not a sequence (Data Analyst now, AI skills layered in later).</li>
+      <li>That "AI skills becoming more valuable" means prompt engineering specifically — rather than AI fluency being folded into data roles anyway.</li>
+      <li>That switching later would mean starting over, when your certifications and portfolio would carry over either way.</li>
+    </ul>
+    <div class="label">Biases At Play</div>
+    <ul>
+      <li><strong>Loss aversion</strong> — the fear of "wasting months" is weighted heavier than the upside of gaining months of income and experience.</li>
+      <li><strong>Fear of missing out (FOMO) / novelty bias</strong> — newer and less proven can feel more valuable than it actually is, purely because it's newer.</li>
+    </ul>
+    <div class="label">What You're Ignoring</div>
+    <p>You already told me you can pivot later — meaning this isn't a one-way door. You're treating a reversible decision like it's permanent.</p>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="card blue">
+    <div class="section-title blue">Decision Matrix</div>
+
+    <div class="bar-set" id="matrix"></div>
+
+    <div class="total-row">
+      <div class="matrix-label">Total Score (out of 70)</div>
+      <div class="bar-set" style="margin-top:10px;">
+        <div class="bar-container">
+          <div class="bar-fill opt-a" style="animation-delay:0.9s; width:58%;">Data Analyst — 41<span class="winner-tag">Winner</span></div>
+        </div>
+        <div class="bar-container">
+          <div class="bar-fill opt-b" style="animation-delay:1s; width:44%;">Prompt Engineering — 31</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="card red">
+    <div class="section-title red">Premortem — 12 Months From Now, It Failed</div>
+
+    <div class="premortem-block">
+      <div class="option-name opt-a">If Data Analyst Failed</div>
+      <div class="label">3 Reasons</div>
+      <ul>
+        <li>Market got flooded with entry-level analysts, making differentiation hard.</li>
+        <li>You didn't build enough real project/portfolio proof beyond certifications.</li>
+        <li>You never layered in AI fluency, so your profile started to look dated fast.</li>
+      </ul>
+      <div class="label">Early Warning Sign</div>
+      <p>Zero interview callbacks after 6-8 weeks of consistent applications.</p>
+      <div class="label">Prevention Action</div>
+      <p>Ship 2-3 portfolio-grade analyst projects in month one, and keep building AI-adjacent tools on the side — not either/or.</p>
+    </div>
+
+    <div class="premortem-block">
+      <div class="option-name opt-b">If AI Prompt Engineering Failed</div>
+      <div class="label">3 Reasons</div>
+      <ul>
+        <li>No clear job title existed to apply for — you couldn't find where to send resumes.</li>
+        <li>Companies wanted "AI + a core skill" (like data or dev), not AI skills alone.</li>
+        <li>4 months wasn't long enough to build a hireable-level portfolio from scratch.</li>
+      </ul>
+      <div class="label">Early Warning Sign</div>
+      <p>Struggling to find any job postings that match the skill set by week 3.</p>
+      <div class="label">Prevention Action</div>
+      <p>Pair it with a core discipline immediately (like data) instead of pursuing it standalone.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="card green">
+    <div class="section-title green">7-Day Test Plan</div>
+    <div class="day-row"><div class="day-num">Day 1-2</div><p>Search live job boards for "Data Analyst" vs "Prompt Engineer" roles in your target market — count real, open postings.</p></div>
+    <div class="day-row"><div class="day-num">Day 3-4</div><p>Do one small experiment: complete a mini data analysis case study using a public dataset, start to finish.</p></div>
+    <div class="day-row"><div class="day-num">Day 5-6</div><p>Have one conversation with a working Data Analyst or hiring manager about what actually gets candidates hired right now.</p></div>
+    <div class="day-row"><div class="day-num">Day 7</div><p>Decision day: if job postings and the conversation both confirm demand, commit fully to Data Analyst for 4 months, keeping AI projects as a side thread.</p></div>
+  </div>
+
+  <!-- SECTION 7 -->
+  <div class="card gold">
+    <div class="section-title gold">The Verdict</div>
+    <div class="verdict-name">Data Analyst</div>
+    <p>It wins because it matches your timeline, your existing certifications, and real market demand — you're not starting from zero, you're finishing what you've already built toward.</p>
+    <p>This could flip if, during the 7-day test, you find prompt engineering job postings are far more common in your target market than expected.</p>
+    <div class="hard-truth">You're not choosing between two unknowns — you're choosing between one path you're already 80% ready for, and one you'd have to build from a hobby into a career in 4 months.</div>
+  </div>
+
+  <!-- SECTION 8 -->
+  <div class="card gold">
+    <div class="section-title gold">Shareable Cards</div>
+    <div class="share-row">
+      <div class="mini-card">
+        <h3>Matrix Summary</h3>
+        <div>
+          <div class="big">Data Analyst</div>
+          <div class="score">41 / 70</div>
+        </div>
+        <div>
+          <div class="big">Prompt Engineering</div>
+          <div class="score">31 / 70</div>
+        </div>
+        <div class="watermark">Built with Claude AI</div>
+      </div>
+      <div class="mini-card">
+        <h3>Verdict</h3>
+        <div class="big" style="color:var(--accent-gold); font-size:18px;">Data Analyst wins</div>
+        <div class="score">Job-ready now beats speculative later.</div>
+        <div class="watermark">Built with Claude AI</div>
+      </div>
+      <div class="mini-card">
+        <h3>LinkedIn Hook</h3>
+        <div class="big">"I almost chased the shiny thing instead of the ready thing."</div>
+        <div class="score">I built a Decision Report to pick between Data Analytics and AI Prompt Engineering — here's what the data said. What would you have chosen?</div>
+        <div class="watermark">Built with Claude AI</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Built with Claude AI | ABTalks 60-Day Challenge</footer>
+</div>
+
+<script>
+  const dims = [
+    { label: "Life/Career Upside", a: 7, b: 6 },
+    { label: "Financial Safety", a: 8, b: 4 },
+    { label: "Growth & Learning", a: 6, b: 7 },
+    { label: "Stress Level (10=low)", a: 6, b: 4 },
+    { label: "Reversibility (10=easy)", a: 6, b: 5 },
+    { label: "Long-term Alignment", a: 5, b: 6 },
+    { label: "Regret Risk (10=low)", a: 3, b: 5 }
+  ];
+
+  const container = document.getElementById('matrix');
+  dims.forEach((d, i) => {
+    const row = document.createElement('div');
+    row.className = 'matrix-row';
+    row.innerHTML = `
+      <div class="matrix-label">${d.label}</div>
+      <div class="bar-set">
+        <div class="bar-container">
+          <div class="bar-fill opt-a" style="animation-delay:${i*0.1}s; width:${d.a*10}%;">${d.a}</div>
+        </div>
+        <div class="bar-container">
+          <div class="bar-fill opt-b" style="animation-delay:${i*0.1 + 0.05}s; width:${d.b*10}%;">${d.b}</div>
+        </div>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+</script>
+
+</body>
+</html>
