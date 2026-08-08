@@ -1,0 +1,38 @@
+
+---
+
+# 2. `DAY3-SUMMARY.md`
+
+```markdown
+# Day 53 — Day 3 Summary
+
+## Resume Parsing Module
+
+Day 53 focused on implementing the resume parsing foundation of HireLens.
+
+The objective was to build a reliable module that can extract usable text from PDF and DOCX resumes before the resume moves to future scoring and AI-analysis stages.
+
+---
+
+## Objectives
+
+The main objectives for Day 53 were:
+
+- Build PDF resume extraction
+- Build DOCX resume extraction
+- Clean extracted text
+- Validate uploaded files
+- Handle parsing errors gracefully
+- Integrate parsing with Flask
+- Verify extraction using a sample resume
+
+---
+
+## Completed Work
+
+### 1. PDF Parser
+
+Implemented:
+
+```text
+parsing/pdf_parser.py
