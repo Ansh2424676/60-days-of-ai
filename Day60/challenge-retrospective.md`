@@ -1,0 +1,77 @@
+
+---
+
+# 3. `challenge-retrospective.md`
+
+```markdown
+# HireLens — Challenge Retrospective
+
+## From Initial Foundation to v1.0.0
+
+**Developer:** Ansh Shukla  
+**Project:** HireLens  
+**Challenge:** AB Talks 60-Day Claude AI Challenge  
+**Final Release:** v1.0.0  
+**Date:** 15 August 2026
+
+---
+
+# The Beginning
+
+HireLens became the final practical project through which the skills developed during the AB Talks 60-Day Claude AI Challenge could be brought together.
+
+The project evolved through multiple stages rather than being created as a single large implementation.
+
+The early work established the project's technical foundation and architecture. Resume parsing was implemented first, followed by keyword extraction and scoring functionality.
+
+---
+
+# Day 3 — Resume Parsing Foundation
+
+The project established its resume-processing foundation.
+
+PDF and DOCX resumes became the input for the analysis pipeline.
+
+The first major challenge was turning unstructured resume documents into usable text that could be analyzed reliably.
+
+This created the foundation for everything that followed.
+
+---
+
+# Day 4 — Keyword Extraction
+
+After parsing resumes, the project moved toward extracting meaningful skills and keywords.
+
+A skills dictionary and keyword extraction logic helped convert resume content into structured information.
+
+This made it possible to compare resume content against a target job description.
+
+---
+
+# Day 5 — Scoring Engine
+
+The next major milestone was the scoring system.
+
+The project introduced:
+
+- ATS scoring
+- Resume-to-job matching
+- Missing-skill detection
+- Regression tests
+
+The scoring engine became the deterministic core of HireLens.
+
+---
+
+# Day 6 — AI Suggestions
+
+Claude integration was added to provide AI-powered resume improvement suggestions.
+
+This created an important separation:
+
+```text
+Deterministic analysis
+        +
+AI-generated recommendations
+        =
+HireLens analysis experience
