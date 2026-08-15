@@ -1,0 +1,47 @@
+
+---
+
+# 2. `future-scope.md`
+
+```markdown
+# HireLens — Future Scope
+
+## Overview
+
+HireLens v1.0.0 provides a functional foundation for resume analysis, ATS compatibility scoring, job matching, missing-skill detection, keyword analysis, AI suggestions, and PDF reporting.
+
+The next stage should focus on improving analysis quality, reliability, user experience, security, and scalability.
+
+---
+
+# Next 3 Months
+
+## Month 1 — Reliability and User Experience
+
+### 1. Improve Resume Parsing
+
+Support more resume layouts and improve extraction from complex PDF and DOCX documents.
+
+Potential improvements:
+
+- Better section detection
+- Improved handling of tables
+- Better handling of multi-column resumes
+- More robust text cleanup
+- Improved malformed-document handling
+
+### 2. Improve Job Description Analysis
+
+Introduce stronger normalization for:
+
+- Skill synonyms
+- Technology aliases
+- Abbreviations
+- Different keyword formats
+
+Example:
+
+```text
+Machine Learning
+ML
+machine-learning
